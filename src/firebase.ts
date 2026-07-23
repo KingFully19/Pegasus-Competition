@@ -8,12 +8,12 @@ import { getFirestore } from "firebase/firestore";
 // 4. Enable "Firestore Database" -> create database (production mode) -> then paste firestore.rules
 //    (see the file firestore.rules in the project root) into Firestore -> Rules -> Publish.
 const firebaseConfig = {
-  apiKey: "REPLACE_ME",
-  authDomain: "REPLACE_ME.firebaseapp.com",
-  projectId: "REPLACE_ME",
-  storageBucket: "REPLACE_ME.appspot.com",
-  messagingSenderId: "REPLACE_ME",
-  appId: "REPLACE_ME",
+  apiKey: "AIzaSyB2UFZU0sOcngndLRLx6_RWI7i7fdev7Po",
+  authDomain: "pegasus-competition.firebaseapp.com",
+  projectId: "pegasus-competition",
+  storageBucket: "pegasus-competition.firebasestorage.app",
+  messagingSenderId: "673542698440",
+  appId: "1:673542698440:web:53659d2ed526cb1139bcfd"
 };
 
 export const app = initializeApp(firebaseConfig);
