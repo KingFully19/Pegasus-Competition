@@ -19,7 +19,7 @@ interface WingMarkProps {
 export default function WingMark({ size = 40, className = "" }: WingMarkProps) {
   return (
     <img
-      src="/pegasus-competition/emblem.png"
+      src="/Pegasus-Competition/emblem.png"
       alt="פגאסוס"
       width={size}
       height={size}
