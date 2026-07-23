@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Suez One", serif;
+  --font-body: "Assistant", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-ink: #0a0a0b;
+  --color-panel: #151317;
+  --color-panel-raised: #1d1a1f;
+  --color-panel-border: #2b2730;
+
+  --color-gold: #c9a24b;
+  --color-gold-bright: #e8c874;
+  --color-gold-dim: #8a6f34;
+
+  --color-silver: #a8adb8;
+  --color-silver-dim: #6e7280;
+
+  --color-bone: #f1efe9;
+  --color-bone-dim: #a39e93;
+
+  --color-blood: #7a2731;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-bone);
+  font-family: var(--font-body);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201, 162, 75, 0.08), transparent),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px);
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+/* rope divider — a signature motif: twin gold/silver cords, like ring ropes */
+.rope-divider {
+  height: 6px;
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      var(--color-gold) 0px, var(--color-gold) 10px,
+      var(--color-ink) 10px, var(--color-ink) 14px,
+      var(--color-silver-dim) 14px, var(--color-silver-dim) 24px,
+      var(--color-ink) 24px, var(--color-ink) 28px
+    );
+  opacity: 0.9;
+}
+
+.tape-corner {
+  position: relative;
+}
+.tape-corner::before,
+.tape-corner::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 4px;
+  background: var(--color-gold);
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
