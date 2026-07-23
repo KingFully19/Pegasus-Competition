@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import type { Award } from "../types";
 import { useAuth } from "../context/AuthContext";
@@ -12,15 +12,20 @@ export default function Profile() {
 
   useEffect(() => {
     if (!profile) return;
-    const q = query(
-      collection(db, "awards"),
-      where("userId", "==", profile.uid),
-      orderBy("awardedAt", "desc")
+    // Only "where" here (no orderBy) so this never needs a Firestore
+    // composite index - we sort client-side instead.
+    const q = query(collection(db, "awards"), where("userId", "==", profile.uid));
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        const list = snap.docs
+          .map((d) => ({ id: d.id, ...d.data() }) as Award)
+          .sort((a, b) => b.awardedAt - a.awardedAt);
+        setAwards(list);
+        setLoading(false);
+      },
+      () => setLoading(false)
     );
-    const unsub = onSnapshot(q, (snap) => {
-      setAwards(snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Award));
-      setLoading(false);
-    });
     return () => unsub();
   }, [profile]);
 

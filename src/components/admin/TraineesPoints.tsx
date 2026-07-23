@@ -5,7 +5,6 @@ import {
   doc,
   increment,
   onSnapshot,
-  orderBy,
   query,
   updateDoc,
   where,
@@ -25,17 +24,24 @@ export default function TraineesPoints() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    const q = query(collection(db, "users"), where("status", "==", "approved"), orderBy("totalPoints", "desc"));
+    const q = query(collection(db, "users"), where("status", "==", "approved"));
     const unsub = onSnapshot(q, (snap) => {
-      setTrainees(snap.docs.map((d) => d.data() as TraineeProfile));
+      const list = snap.docs
+        .map((d) => d.data() as TraineeProfile)
+        .filter((t) => t.role !== "admin")
+        .sort((a, b) => b.totalPoints - a.totalPoints);
+      setTrainees(list);
     });
     return () => unsub();
   }, []);
 
   useEffect(() => {
-    const q = query(collection(db, "missions"), where("active", "==", true), orderBy("title", "asc"));
+    const q = query(collection(db, "missions"), where("active", "==", true));
     const unsub = onSnapshot(q, (snap) => {
-      setMissions(snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Mission));
+      const list = snap.docs
+        .map((d) => ({ id: d.id, ...d.data() }) as Mission)
+        .sort((a, b) => a.title.localeCompare(b.title, "he"));
+      setMissions(list);
     });
     return () => unsub();
   }, []);

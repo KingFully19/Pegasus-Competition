@@ -140,6 +140,11 @@ export default function ManageMissions() {
       </form>
 
       <div className="mt-6 flex flex-col gap-2.5">
+        {missions.length === 0 && (
+          <p className="rounded-xl border border-(--color-panel-border) bg-(--color-panel) px-5 py-6 text-center text-(--color-bone-dim)">
+            עדיין לא נוצרו משימות. הוסיפו את הראשונה למעלה.
+          </p>
+        )}
         {missions.map((m) => (
           <div
             key={m.id}

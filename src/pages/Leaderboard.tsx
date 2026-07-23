@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import type { TraineeProfile } from "../types";
 import WingMark from "../components/WingMark";
@@ -10,15 +10,22 @@ export default function Leaderboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const q = query(
-      collection(db, "users"),
-      where("status", "==", "approved"),
-      orderBy("totalPoints", "desc")
+    // Only "where" here (no orderBy) so this never needs a Firestore
+    // composite index - we sort client-side instead. Ohad's own admin
+    // account never shows up on the leaderboard.
+    const q = query(collection(db, "users"), where("status", "==", "approved"));
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        const list = snap.docs
+          .map((d) => d.data() as TraineeProfile)
+          .filter((t) => t.role !== "admin")
+          .sort((a, b) => b.totalPoints - a.totalPoints);
+        setTrainees(list);
+        setLoading(false);
+      },
+      () => setLoading(false)
     );
-    const unsub = onSnapshot(q, (snap) => {
-      setTrainees(snap.docs.map((d) => d.data() as TraineeProfile));
-      setLoading(false);
-    });
     return () => unsub();
   }, []);
 

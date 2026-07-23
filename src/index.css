@@ -58,15 +58,27 @@ body {
 
 .tape-corner {
   position: relative;
+  overflow: hidden;
 }
 .tape-corner::before,
 .tape-corner::after {
   content: "";
   position: absolute;
-  width: 22px;
-  height: 4px;
+  z-index: 0;
+  width: 30px;
+  height: 5px;
   background: var(--color-gold);
-  opacity: 0.8;
+  opacity: 0.55;
+}
+.tape-corner::before {
+  top: 14px;
+  left: -8px;
+  transform: rotate(-45deg);
+}
+.tape-corner::after {
+  bottom: 14px;
+  right: -8px;
+  transform: rotate(-45deg);
 }
 
 @media (prefers-reduced-motion: reduce) {

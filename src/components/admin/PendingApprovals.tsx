@@ -4,7 +4,6 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
-  orderBy,
   query,
   updateDoc,
   where,
@@ -18,15 +17,20 @@ export default function PendingApprovals() {
   const [busyUid, setBusyUid] = useState<string | null>(null);
 
   useEffect(() => {
-    const q = query(
-      collection(db, "users"),
-      where("status", "==", "pending"),
-      orderBy("createdAt", "asc")
+    // Only "where" here (no orderBy) so this never needs a Firestore
+    // composite index - we sort client-side instead.
+    const q = query(collection(db, "users"), where("status", "==", "pending"));
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        const list = snap.docs
+          .map((d) => d.data() as TraineeProfile)
+          .sort((a, b) => a.createdAt - b.createdAt);
+        setPending(list);
+        setLoading(false);
+      },
+      () => setLoading(false)
     );
-    const unsub = onSnapshot(q, (snap) => {
-      setPending(snap.docs.map((d) => d.data() as TraineeProfile));
-      setLoading(false);
-    });
     return () => unsub();
   }, []);
 

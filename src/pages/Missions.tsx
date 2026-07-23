@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import type { Mission } from "../types";
 import RopeDivider from "../components/RopeDivider";
@@ -9,15 +9,20 @@ export default function Missions() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const q = query(
-      collection(db, "missions"),
-      where("active", "==", true),
-      orderBy("points", "desc")
+    // Only "where" here (no orderBy) so this never needs a Firestore
+    // composite index - we sort client-side instead.
+    const q = query(collection(db, "missions"), where("active", "==", true));
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        const list = snap.docs
+          .map((d) => ({ id: d.id, ...d.data() }) as Mission)
+          .sort((a, b) => b.points - a.points);
+        setMissions(list);
+        setLoading(false);
+      },
+      () => setLoading(false)
     );
-    const unsub = onSnapshot(q, (snap) => {
-      setMissions(snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Mission));
-      setLoading(false);
-    });
     return () => unsub();
   }, []);
 
