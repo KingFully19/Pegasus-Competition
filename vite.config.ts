@@ -6,6 +6,6 @@ import tailwindcss from '@tailwindcss/vite'
 // e.g. if your repo is github.com/<user>/pegasus-competition, keep base as '/pegasus-competition/'
 // If you deploy to a custom domain or a "<user>.github.io" root repo, set base to '/'
 export default defineConfig({
-  base: '/pegasus-competition/',
+  base: '/Pegasus-Competition/',
   plugins: [react(), tailwindcss()],
 })
