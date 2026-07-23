@@ -25,21 +25,9 @@ export default function Signup() {
     } catch (err: unknown) {
       const code = (err as { code?: string })?.code;
       if (code === "auth/email-already-in-use") {
-        setError("כתובת האימייל הזו כבר רשומה. נסו להתחבר, או אפסו סיסמה בעמוד ההתחברות.");
-      } else if (code === "auth/weak-password") {
-        setError("הסיסמה חלשה מדי - נסו סיסמה ארוכה/מורכבת יותר.");
-      } else if (code === "auth/invalid-email") {
-        setError("כתובת האימייל לא תקינה.");
-      } else if (code === "auth/unauthorized-domain") {
-        setError(
-          "הדומיין הזה לא מאושר ב-Firebase. יש להוסיף אותו תחת Authentication → Settings → Authorized domains."
-        );
-      } else if (code === "auth/network-request-failed") {
-        setError("בעיית רשת - בדקו את החיבור לאינטרנט ונסו שוב.");
-      } else if (code === "permission-denied") {
-        setError("הבקשה נחסמה על ידי כללי האבטחה של Firestore (permission-denied).");
+        setError("כתובת האימייל הזו כבר רשומה. נסו להתחבר.");
       } else {
-        setError(`משהו השתבש בהרשמה (${code ?? "שגיאה לא ידועה"}). נסו שוב.`);
+        setError("משהו השתבש בהרשמה. נסו שוב.");
       }
       console.error(err);
     } finally {
